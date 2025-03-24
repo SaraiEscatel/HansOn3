@@ -1,27 +1,26 @@
 import java.util.*;
 
 public class FristSearch {
-
-    public static void greedyBestFristSearch(Node start, String goal){
-        PriorityQueue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(n -> n.heuristic));
+    public static void greedyBestFirstSearch(Node start, String goal) {
+        PriorityQueue<NodeWrapper> queue = new PriorityQueue<>(Comparator.comparingInt(n -> n.node.heuristic));
         Set<String> visited = new HashSet<>();
 
-        queue.add(start);
+        queue.add(new NodeWrapper(start, 0, new ArrayList<>()));
 
-        while (!queue.isEmpty()){
-            Node current = queue.poll();
-            System.out.println("Visitar: " + current.name);
+        while (!queue.isEmpty()) {
+            NodeWrapper current = queue.poll();
+            System.out.println("Visito: " + current.node.name);
 
-            if (current.name.equals(goal)){
-                System.out.println("Encontrado!");
+            if (current.node.name.equals(goal)) {
+                System.out.println("Encontrado! Ruta: " + current.path);
                 return;
             }
 
-            visited.add(current.name);
+            visited.add(current.node.name);
 
-            for (Edge edge : current.neighbors){
-                if (!visited.contains(edge.target.name)){
-                    queue.add(edge.target);
+            for (Edge edge : current.node.neighbors) {
+                if (!visited.contains(edge.target.name)) {
+                    queue.add(new NodeWrapper(edge.target, 0, current.path));
                 }
             }
         }
@@ -42,7 +41,6 @@ public class FristSearch {
         d.addNeighbor(e, 1);
         c.addNeighbor(e, 1);
 
-        greedyBestFristSearch(a, "E");
+        greedyBestFirstSearch(a, "E");
     }
-
 }

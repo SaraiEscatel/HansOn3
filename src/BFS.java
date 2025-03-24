@@ -1,31 +1,29 @@
 import java.util.*;
 
 public class BFS {
-
-    public static void breadthFirstSearch(Node start, String goal){
-        Queue<Node> queue = new LinkedList<>();
+    public static void breadthFirstSearch(Node start, String goal) {
+        Queue<NodeWrapper> queue = new LinkedList<>();
         Set<String> visited = new HashSet<>();
 
-        queue.add(start);
+        queue.add(new NodeWrapper(start, 0, new ArrayList<>()));
         visited.add(start.name);
 
-        while (!queue.isEmpty()){
-            Node current = queue.poll();
-            System.out.println("Visitar: " + current.name);
+        while (!queue.isEmpty()) {
+            NodeWrapper current = queue.poll();
+            System.out.println("Visito: " + current.node.name);
 
-            if (current.name.equals(goal)){
-                System.out.println("Encondrado!");
+            if (current.node.name.equals(goal)) {
+                System.out.println("Encontrado! Ruta: " + current.path);
                 return;
             }
 
-            for (Edge edge : current.neighbors){
-                if (!visited.contains(edge.target.name)){
-                    queue.add(edge.target);
+            for (Edge edge : current.node.neighbors) {
+                if (!visited.contains(edge.target.name)) {
                     visited.add(edge.target.name);
+                    queue.add(new NodeWrapper(edge.target, 0, current.path));
                 }
             }
         }
-
     }
 
     public static void main(String[] args) {
@@ -45,5 +43,4 @@ public class BFS {
 
         breadthFirstSearch(a, "E");
     }
-
 }
